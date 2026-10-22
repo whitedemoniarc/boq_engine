@@ -18,45 +18,109 @@ class MainRebar:
     ):
         self.mark = mark
         self.diameter = diameter
+        # Normalisasi diameter
+        # Menerima 19 atau "D19"
+        if isinstance(diameter, str):
+            diameter = diameter.strip().upper()
+            if diameter.startswith("D"):
+                diameter = diameter[1:]
+
+        try:
+            self.diameter = int(diameter)
+        except (ValueError, TypeError):
+            raise ValueError(
+                "Diameter harus berupa angka atau format D19."
+            )
+        
         self.quantity = quantity
         self.beam_length = beam_length
         self.anchorage_left = anchorage_left
         self.anchorage_right = anchorage_right
         self.position = position
 
+        self._validate()
         
+    def _validate(self):
+        if self.diameter <= 0:
+            raise ValueError("Diameter harus positif.")
 
+        if self.quantity <= 0:
+            raise ValueError("Jumlah batang harus positif.")
+
+        if self.beam_length <= 0:
+            raise ValueError("Panjang balok harus positif.")
+
+        if self.anchorage_left < 0 or self.anchorage_right < 0:
+            raise ValueError("Panjang penyaluran tidak boleh negatif.")
+        
+        rebar_key = f"D{self.diameter}"
+
+        if rebar_key not in REBAR_UNIT_WEIGHT:
+            raise ValueError(
+                f"Berat satuan {rebar_key} belum tersedia."
+            )
+
+
+        # if f"D{self.diameter}" not in REBAR_UNIT_WEIGHT:
+        #     raise ValueError(
+        #         f"Berat satuan D{self.diameter} belum tersedia."
+            # )
+
+
+    # @property
+    # def cutting_length(self):
+
+    #     return (
+    #         self.beam_length
+    #         + self.anchorage_left
+    #         + self.anchorage_right
+    #     ) / 1000
+
+    # @property
+    # def total_length(self):
+
+    #     return (
+    #         self.quantity * self.cutting_length
+    #     )
+
+    # @property
+    # def unit_weight(self):
+
+    #     return REBAR_UNIT_WEIGHT[
+    #         self.diameter
+    #     ]
+    
+    
+    # @property
+    # def total_weight(self):
+
+    #     return (
+    #         self.total_length * self.unit_weight
+    #     )
+    
     @property
-    def cutting_length(self):
-
+    def cutting_length_mm(self):
         return (
             self.beam_length
             + self.anchorage_left
             + self.anchorage_right
-        ) / 1000
+        )
+
+    @property
+    def cutting_length_m(self):
+        return self.cutting_length_mm / 1000
 
     @property
     def total_length(self):
-
-        return (
-            self.quantity
-            * self.cutting_length
-        )
+        return self.quantity * self.cutting_length_m
 
     @property
     def unit_weight(self):
-
-        return REBAR_UNIT_WEIGHT[
-            self.diameter
-        ]
+        return REBAR_UNIT_WEIGHT[f"D{self.diameter}"]
 
     @property
     def total_weight(self):
-
-        return (
-            self.total_length
-            * self.unit_weight
-        )
+        return self.total_length * self.unit_weight
         
         
 # Perhitungan berat besi utama (main rebar) menggunakan rumus:
@@ -103,5 +167,5 @@ def calculate_main_rebar_weight(
         "cutting_length_per_bar_m": cutting_length_m,
         "total_length_m": total_length_m,
         "unit_weight_kg_per_m": unit_weight,
-        "total_weight_kg": total_weight_kg,
+        "total_weight_kg": total_weight_kg,  
     }

@@ -108,7 +108,7 @@ beam = Beam(
 
 beam.add_main_rebar(
     mark="B1-T",
-    diameter="D19",
+    diameter=19,
     quantity=4,
     anchorage_left=400,
     anchorage_right=400,
@@ -118,7 +118,7 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-B",
-    diameter="D19",
+    diameter=19,
     quantity=4,
     anchorage_left=400,
     anchorage_right=400,
@@ -175,7 +175,7 @@ print(
     "MPa"
 )
 
-print(beam.cover)
+# print(beam.cover)
 
 print()
 
@@ -197,42 +197,49 @@ print(f"Cover      : {beam.cover} mm")
 
 print()
 print(
-    f"{'MARK':<8}"
+    f"{'MARK':<10}"
     f"{'POS':<10}"
     f"{'BAR':<8}"
-    f"{'QTY':>5}"
-    f"{'LENGTH':>10}"
+    f"{'QTY':>8}"
+    f"{'LENGTH':>12}"
     f"{'WEIGHT':>12}"
 )
 
-print("-" * 55)
+print("-" * 64)
 
 
 for rebar in beam.main_rebars:
 
     print(
-        f"{rebar.mark:<8}"
+        f"{rebar.mark:<10}"
         f"{rebar.position:<10}"
-        f"{rebar.diameter:<6}"
-        f"{rebar.quantity:>4} pcs   "
-        f"{rebar.cutting_length:.2f} m   "
-        f"{rebar.total_weight:.2f} kg"
+        # f"{rebar.diameter:<6}"
+        f"{'D' + str(rebar.diameter):<8}"
+        f"{rebar.quantity:>5}  "
+        f"{ 'pcs'  :>4}" 
+        f"{(f'{rebar.cutting_length_m:.2f} m')  :>12}"
+        f"{f'{rebar.total_weight:.2f} kg':>12}"
+        # f"{rebar.total_weight:.2f} kg"
     )
 
 
 for stirrup in beam.stirrups:
 
     print(
-        f"{stirrup.mark:<8}"
+        f"{stirrup.mark:<10}"
         f"{'STIRRUP':<10}"
-        f"{stirrup.diameter:<6}"
-        f"{stirrup.quantity:>4} pcs   "
-        f"{stirrup.cutting_length:.2f} m   "
-        f"{stirrup.total_weight:.2f} kg"
+        f"{stirrup.diameter:<8}"
+        f"{stirrup.quantity:>5}  "
+        # f"{(str(stirrup.quantity) + ' pcs'):>8}"
+        f"{ 'pcs'  :>4}" 
+        # f"{stirrup.cutting_length:.2f} m   "
+        # f"{stirrup.total_weight:.2f} kg"
+        f"{(f'{stirrup.cutting_length:.2f} m'):>12}"
+        f"{(f'{stirrup.total_weight:.2f} kg'):>12}"
     )
 
 
-print("------------------------------------------")
+print("-" * 64)
 
 print(
     f"TOTAL REBAR = "
