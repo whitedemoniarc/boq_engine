@@ -107,7 +107,7 @@ beam = Beam(
 
 
 beam.add_main_rebar(
-    mark="B1-T",
+    mark="B1-TA",
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -117,7 +117,16 @@ beam.add_main_rebar(
 
 
 beam.add_main_rebar(
-    mark="B1-B",
+    mark="B1-TB",
+    diameter=19,
+    quantity=4,
+    anchorage_left=400,
+    anchorage_right=400,
+    position="TOP"
+)
+
+beam.add_main_rebar(
+    mark="B1-LA",
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -125,6 +134,14 @@ beam.add_main_rebar(
     position="BOTTOM"
 )
 
+beam.add_main_rebar(
+    mark="B1-LB",
+    diameter=19,
+    quantity=4,
+    anchorage_left=400,
+    anchorage_right=400,
+    position="BOTTOM"
+)
 
 beam.add_stirrup(
     mark="B1-ST",
@@ -132,6 +149,11 @@ beam.add_stirrup(
     spacing=150
 )
 
+beam.add_stirrup(
+    mark="B1-SL",
+    diameter="D10",
+    spacing=150
+)
 
 from data.materials import (
     Concrete,
@@ -161,18 +183,16 @@ parameters = DesignParameters(
 
 print("CONCRETE")
 print(
-    parameters.concrete.name,
-    parameters.concrete.fc,
-    "MPa"
+    f"{parameters.concrete.name}: "
+    f"{parameters.concrete.fc} MPa"
 )
 
 print()
 
 print("REINFORCEMENT")
 print(
-    parameters.reinforcement.name,
-    parameters.reinforcement.fy,
-    "MPa"
+    f"{parameters.reinforcement.name}: "
+    f"{parameters.reinforcement.fy} MPa"
 )
 
 # print(beam.cover)
