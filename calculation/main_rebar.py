@@ -6,6 +6,8 @@ class MainRebar:
     def __init__(
         self,
         mark,
+        b_lebar_mm,
+        h_tinggi_mm,
         diameter,
         quantity,
         beam_length,
@@ -15,8 +17,10 @@ class MainRebar:
         anchorage_left=0,
         anchorage_right=0,
         position="BOTTOM",
-    ):
+    ):  
         self.mark = mark
+        self.b_lebar_mm = b_lebar_mm
+        self.h_tinggi_mm = h_tinggi_mm
         self.diameter = diameter
         # Normalisasi diameter
         # Menerima 19 atau "D19"

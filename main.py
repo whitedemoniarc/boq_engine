@@ -108,6 +108,8 @@ beam = Beam(
 
 beam.add_main_rebar(
     mark="B1-TA",
+    b_lebar_mm=beam.width,
+    h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -118,6 +120,8 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-TB",
+    b_lebar_mm=beam.width,
+    h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -127,6 +131,8 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-LA",
+    b_lebar_mm=beam.width,
+    h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -136,6 +142,8 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-LB",
+    b_lebar_mm=beam.width,
+    h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -145,12 +153,14 @@ beam.add_main_rebar(
 
 beam.add_stirrup(
     mark="B1-ST",
+
     diameter="D10",
-    spacing=150
+    spacing=150,
 )
 
 beam.add_stirrup(
     mark="B1-SL",
+
     diameter="D10",
     spacing=150
 )
@@ -219,6 +229,8 @@ print()
 print(
     f"{'MARK':<10}"
     f"{'POS':<10}"
+    f"{'B (mm)':>10} "
+    f"{'H (mm)':>10} "
     f"{'BAR':<8}"
     f"{'QTY':>8}"
     f"{'LENGTH':>12}"
@@ -233,12 +245,16 @@ for rebar in beam.main_rebars:
     print(
         f"{rebar.mark:<10}"
         f"{rebar.position:<10}"
+        f"{rebar.b_lebar_mm:>10} "
+        f"{rebar.h_tinggi_mm:>10} "
         # f"{rebar.diameter:<6}"
         f"{'D' + str(rebar.diameter):<8}"
         f"{rebar.quantity:>5}  "
-        f"{ 'pcs'  :>4}" 
-        f"{(f'{rebar.cutting_length_m:.2f} m')  :>12}"
-        f"{f'{rebar.total_weight:.2f} kg':>12}"
+        f"{ 'pcs'  :>4}"
+        f"{f'{rebar.cutting_length_m:.2f} m':>12}"
+        f"{f'{rebar.total_weight:.2f} kg':>12}"  
+        # f"{(f'{rebar.cutting_length_m:.2f} m')  :>12}"
+        # f"{f'{rebar.total_weight:.2f} kg':>12}"
         # f"{rebar.total_weight:.2f} kg"
     )
 
@@ -248,6 +264,8 @@ for stirrup in beam.stirrups:
     print(
         f"{stirrup.mark:<10}"
         f"{'STIRRUP':<10}"
+        f"{beam.width:>10} "
+        f"{beam.height:>10} "
         f"{stirrup.diameter:<8}"
         f"{stirrup.quantity:>5}  "
         # f"{(str(stirrup.quantity) + ' pcs'):>8}"
@@ -337,7 +355,6 @@ print()
 print("BEAM COVER:", parameters.beam_cover, "mm")
 
 
-
 from calculation.flexure import calculate_required_rebar
 
 result = calculate_required_rebar(
@@ -354,7 +371,6 @@ for key, value in result.items():
     print(f"{key}: {value:.2f}")
 
 
-
 from calculation.flexure import calculate_minimum_rebar
 
 minimum_result = calculate_minimum_rebar(
@@ -368,7 +384,6 @@ print("\n=== MINIMUM FLEXURAL REINFORCEMENT ===")
 
 for key, value in minimum_result.items():
     print(f"{key}: {value:.2f}")
-
 
 
 from calculation.flexure import select_main_rebar
@@ -395,7 +410,6 @@ print(
     f"As provided       : "
     f"{selected_rebar['As_provided_mm2']:.2f} mm2"
 )
-
 
 
 from calculation.flexure import check_main_rebar_fit
@@ -464,7 +478,6 @@ print(
 
 
 print("-" * 55)
-
 
 
 from calculation.main_rebar import calculate_main_rebar_weight

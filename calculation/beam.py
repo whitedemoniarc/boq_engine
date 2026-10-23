@@ -14,20 +14,20 @@ class Beam:
         #cover       # Tebal selimut beton / concrete cover (mm)
         parameters  # Objek DesignParameters    
     ):
-        
+
         self.name = name        # Nama balok, contoh: "B1"
         self.width = width      # Lebar balok dalam mm              
         self.height = height    # Tinggi balok dalam mm
         self.length = length    # Panjang balok dalam mm
-        # self.cover = cover      # Tebal selimut beton / concrete cover (mm) 
+        # self.cover = cover      # Tebal selimut beton / concrete cover (mm)
 
         self.main_rebars = []   # Tempat penampungan kosong untuk daftar besi utama (main rebar)
         self.rebars = []        # Tempat penampungan kosong untuk daftar besi
         self.stirrups = []      # Tempat penampungan kosong untuk daftar besi stirrup
-        
+
         self.parameters = parameters       # Mengambil properti concrete dari objek DesignParameters
 
-# Memasukkan Besi Baru
+    # Memasukkan Besi Baru
     def add_rebar( 
         self,
         mark,
@@ -46,10 +46,12 @@ class Beam:
 
         self.rebars.append(rebar)       # Menambahkan objek Rebar yang baru dibuat ke dalam daftar self.rebars
 
-# Memasukkan Besi Utama Baru
+    # Memasukkan Besi Utama Baru
     def add_main_rebar(
         self,
         mark,
+        b_lebar_mm,
+        h_tinggi_mm,
         diameter,
         quantity,
         # anchorage_left,
@@ -62,6 +64,8 @@ class Beam:
 
         rebar = MainRebar(
         mark=mark,
+        b_lebar_mm=b_lebar_mm,
+        h_tinggi_mm=h_tinggi_mm,
         diameter=diameter,
         quantity=quantity,
         beam_length=self.length,
@@ -73,7 +77,7 @@ class Beam:
         self.main_rebars.append(rebar)
         return rebar
 
-# Memasukkan Besi Stirrup Baru
+    # Memasukkan Besi Stirrup Baru
     def add_stirrup(
         self,
         mark,
@@ -92,39 +96,35 @@ class Beam:
 
         self.stirrups.append(stirrup)   # Menambahkan objek Stirrup yang baru dibuat ke dalam daftar self.stirrups
 
+    # Menghitung Berat Total Besi
+    #    @property                           # Menandai bahwa metode ini adalah properti dari kelas Beam, sehingga dapat diakses seperti atribut biasa (tanpa tanda kurung)
+    #    def total_rebar_weight(self):       # Menghitung berat total besi yang ada di dalam balok
+    #        return sum(                     # Menggunakan fungsi sum() untuk menjumlahkan berat total besi dari setiap objek Rebar yang ada di dalam daftar self.rebars
+    #            rebar.total_weight          # Mengambil properti total_weight dari setiap objek Rebar yang ada di dalam daftar self.rebars
+    #            for rebar in self.rebars    # Melakukan iterasi untuk setiap objek Rebar yang ada di dalam daftar self.rebars
+    #        )
 
-# Menghitung Berat Total Besi
-#    @property                           # Menandai bahwa metode ini adalah properti dari kelas Beam, sehingga dapat diakses seperti atribut biasa (tanpa tanda kurung)
-#    def total_rebar_weight(self):       # Menghitung berat total besi yang ada di dalam balok
-#        return sum(                     # Menggunakan fungsi sum() untuk menjumlahkan berat total besi dari setiap objek Rebar yang ada di dalam daftar self.rebars
-#            rebar.total_weight          # Mengambil properti total_weight dari setiap objek Rebar yang ada di dalam daftar self.rebars
-#            for rebar in self.rebars    # Melakukan iterasi untuk setiap objek Rebar yang ada di dalam daftar self.rebars
-#        )
+    # Membuat Tabel Laporan Pembesian
+    #    def rebar_schedule(self):
 
-# Membuat Tabel Laporan Pembesian
-#    def rebar_schedule(self):
+    #        schedule = []               # Membuat list kosong untuk menampung data schedule pembesian
 
-#        schedule = []               # Membuat list kosong untuk menampung data schedule pembesian
+    #        for rebar in self.rebars:   # Melakukan iterasi untuk setiap besi yang ada di dalam daftar rebars
 
-#        for rebar in self.rebars:   # Melakukan iterasi untuk setiap besi yang ada di dalam daftar rebars
+    #                "mark": rebar.mark,             # Kode tanda besi (misal: "T1", "B1")
+    #                "position": rebar.position,     # Posisi besi (misal: "Atas", "Bawah", "Kiri", "Kanan")
+    #                "diameter": rebar.diameter,     # Diameter besi (misal: "D10", "D13", "D19")
+    #                "quantity": rebar.quantity,     # Jumlah batang besi
+    #                "length": rebar.length,         # Panjang batang besi (m)
+    #                "total_length": rebar.total_length, # Total panjang besi (m)
+    #                "weight": rebar.total_weight    # Berat total besi tersebut dalam kg (diambil otomatis dari properti kelas Rebar)
+    #           })
 
-#                "mark": rebar.mark,             # Kode tanda besi (misal: "T1", "B1")
-#                "position": rebar.position,     # Posisi besi (misal: "Atas", "Bawah", "Kiri", "Kanan")
-#                "diameter": rebar.diameter,     # Diameter besi (misal: "D10", "D13", "D19")
-#                "quantity": rebar.quantity,     # Jumlah batang besi
-#                "length": rebar.length,         # Panjang batang besi (m)
-#                "total_length": rebar.total_length, # Total panjang besi (m)
-#                "weight": rebar.total_weight    # Berat total besi tersebut dalam kg (diambil otomatis dari properti kelas Rebar)
-#           })
-
-#        return schedule         # Mengembalikan daftar schedule pembesian dalam bentuk list of dictionaries
-
+    #        return schedule         # Mengembalikan daftar schedule pembesian dalam bentuk list of dictionaries
 
     @property
     def cover(self):
         return self.parameters.beam_cover
-
-
 
     @property
     def total_rebar_weight(self):
@@ -149,5 +149,3 @@ class Beam:
             + longitudinal_weight
             + stirrup_weight
         )
-        
-        
