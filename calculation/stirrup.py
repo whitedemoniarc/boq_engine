@@ -12,9 +12,7 @@ class Stirrup:  # Mendefinisikan kelas Stirrup, yang merepresentasikan besi stir
         mark,                  # Kode tanda besi (misal: "ST1", "ST2")
         diameter,              # Diameter besi stirrup (misal: "D10", "D13", "D19")
         spacing,               # Jarak antar stirrup (mm)
-        beam_width,            # Lebar balok (mm)
-        beam_height,           # Tinggi balok (mm)
-        beam_length,           # Panjang balok (mm)
+       beam,                  # Objek balok yang berisi informasi dimensi balok 
         cover                  # Jarak pelindung besi (mm)
     ):
         self.mark = mark                # Kode tanda besi (misal: "ST1", "ST2")
@@ -22,11 +20,23 @@ class Stirrup:  # Mendefinisikan kelas Stirrup, yang merepresentasikan besi stir
         self.diameter_mm = int(diameter.replace("D", "")) # Mengonversi diameter ke milimeter
         self.spacing = spacing          # Jarak antar stirrup (mm)
 
-        self.beam_width = beam_width    # Lebar balok (mm)
-        self.beam_height = beam_height  # Tinggi balok (mm)
-        self.beam_length = beam_length  # Panjang balok (mm)
-
+        # self.beam_width = beam_width    # Lebar balok (mm)
+        # self.beam_height = beam_height  # Tinggi balok (mm)
+        # self.beam_length = beam_length  # Panjang balok (mm)
+        self.beam=beam
         self.cover = cover              # Jarak pelindung besi (mm)
+
+    @property
+    def beam_width(self):
+        return self.beam.width
+
+    @property
+    def beam_height(self):
+        return self.beam.height
+
+    @property
+    def beam_length(self):
+        return self.beam.length
 
     @property
     def quantity(self):

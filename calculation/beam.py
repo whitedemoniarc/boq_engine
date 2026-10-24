@@ -50,8 +50,6 @@ class Beam:
     def add_main_rebar(
         self,
         mark,
-        b_lebar_mm,
-        h_tinggi_mm,
         diameter,
         quantity,
         # anchorage_left,
@@ -64,11 +62,12 @@ class Beam:
 
         rebar = MainRebar(
         mark=mark,
-        b_lebar_mm=b_lebar_mm,
-        h_tinggi_mm=h_tinggi_mm,
+        beam=self,
+        # b_lebar_mm=b_lebar_mm,
+        # h_tinggi_mm=h_tinggi_mm,
         diameter=diameter,
         quantity=quantity,
-        beam_length=self.length,
+        # beam_length=self.length,
         anchorage_left=anchorage_left,
         anchorage_right=anchorage_right,
         position=position
@@ -88,13 +87,13 @@ class Beam:
             mark=mark,                  # Kode tanda besi (misal: "ST1", "ST2")
             diameter=diameter,          # Diameter besi stirrup (misal: "D10", "D13", "D19")
             spacing=spacing,            # Jarak antar stirrup (mm)
-            beam_width=self.width,      # Lebar balok (mm)
-            beam_height=self.height,    # Tinggi balok (mm)
-            beam_length=self.length,    # Panjang balok (mm)
+            beam=self,
             cover=self.cover            # Jarak pelindung besi (mm)
         )
 
-        self.stirrups.append(stirrup)   # Menambahkan objek Stirrup yang baru dibuat ke dalam daftar self.stirrups
+        self.stirrups.append(stirrup)  
+        return stirrup
+        # Menambahkan objek Stirrup yang baru dibuat ke dalam daftar self.stirrups
 
     # Menghitung Berat Total Besi
     #    @property                           # Menandai bahwa metode ini adalah properti dari kelas Beam, sehingga dapat diakses seperti atribut biasa (tanpa tanda kurung)

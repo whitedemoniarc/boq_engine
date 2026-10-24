@@ -6,11 +6,10 @@ class MainRebar:
     def __init__(
         self,
         mark,
-        b_lebar_mm,
-        h_tinggi_mm,
+        beam,
         diameter,
         quantity,
-        beam_length,
+        # beam_length,
         # anchorage_left,
         # anchorage_right,
         # position
@@ -19,8 +18,7 @@ class MainRebar:
         position="BOTTOM",
     ):  
         self.mark = mark
-        self.b_lebar_mm = b_lebar_mm
-        self.h_tinggi_mm = h_tinggi_mm
+        self.beam=beam
         self.diameter = diameter
         # Normalisasi diameter
         # Menerima 19 atau "D19"
@@ -37,12 +35,24 @@ class MainRebar:
             )
         
         self.quantity = quantity
-        self.beam_length = beam_length
+        
         self.anchorage_left = anchorage_left
         self.anchorage_right = anchorage_right
         self.position = position
 
         self._validate()
+        
+    @property
+    def beam_width(self):
+        return self.beam.width
+
+    @property
+    def beam_height(self):
+        return self.beam.height
+
+    @property
+    def beam_length(self):
+        return self.beam.length
         
     def _validate(self):
         if self.diameter <= 0:

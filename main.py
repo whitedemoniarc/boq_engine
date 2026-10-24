@@ -108,8 +108,6 @@ beam = Beam(
 
 beam.add_main_rebar(
     mark="B1-TA",
-    b_lebar_mm=beam.width,
-    h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -120,8 +118,6 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-TB",
-    b_lebar_mm=beam.width,
-    h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -131,8 +127,8 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-LA",
-    b_lebar_mm=beam.width,
-    h_tinggi_mm=beam.height,
+    # b_lebar_mm=beam.width,
+    # h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -142,8 +138,8 @@ beam.add_main_rebar(
 
 beam.add_main_rebar(
     mark="B1-LB",
-    b_lebar_mm=beam.width,
-    h_tinggi_mm=beam.height,
+    # b_lebar_mm=beam.width,
+    # h_tinggi_mm=beam.height,
     diameter=19,
     quantity=4,
     anchorage_left=400,
@@ -153,14 +149,12 @@ beam.add_main_rebar(
 
 beam.add_stirrup(
     mark="B1-ST",
-
     diameter="D10",
     spacing=150,
 )
 
 beam.add_stirrup(
     mark="B1-SL",
-
     diameter="D10",
     spacing=150
 )
@@ -245,8 +239,8 @@ for rebar in beam.main_rebars:
     print(
         f"{rebar.mark:<10}"
         f"{rebar.position:<10}"
-        f"{rebar.b_lebar_mm:>10} "
-        f"{rebar.h_tinggi_mm:>10} "
+        f"{rebar.beam.width:>10} "
+        f"{rebar.beam.height:>10} "
         # f"{rebar.diameter:<6}"
         f"{'D' + str(rebar.diameter):<8}"
         f"{rebar.quantity:>5}  "
@@ -504,6 +498,17 @@ for key, value in weight_result.items():
 print()
 print("-" * 55)
 
+print("Beam width:", beam.width)
+print("Beam height:", beam.height)
+
+rebar = beam.main_rebars[0]
+stirrup = beam.stirrups[0]
+
+print("MainRebar width:", rebar.beam_width)
+print("MainRebar height:", rebar.beam_height)
+
+print("Stirrup width:", stirrup.beam_width)
+print("Stirrup height:", stirrup.beam_height)
 
 # Contoh: balok panjang 6.000 mm
 # Nilai penyaluran berikut hanya untuk menguji program,
