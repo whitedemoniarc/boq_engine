@@ -532,3 +532,43 @@ print("Stirrup height:", stirrup.beam_height)
 # print(f"Total length      : {main_bar.total_length:.2f} m")
 # print(f"Unit weight       : {main_bar.unit_weight:.3f} kg/m")
 # print(f"Total weight      : {main_bar.total_weight:.2f} kg")
+from calculation.beam import Beam
+from data.beam_data import BEAM_DATA
+
+
+def create_beam(beam_type, parameters):
+    data = BEAM_DATA[beam_type]
+
+    return Beam(
+        name=beam_type,
+        width=data["width"],
+        height=data["height"],
+        length=data["length"],
+        parameters=parameters,
+    )
+    
+    
+from data.beam_design_data import BEAM_DESIGN_DATA
+
+for item in BEAM_DESIGN_DATA:
+    beam = create_beam(
+        item["beam_type"],
+        parameters,
+    )
+
+beam = create_beam("B1", parameters)
+print("\n=== BEAM DETAILS ===")
+print(beam.name)
+print(beam.width)
+print(beam.height)
+print(beam.length)
+
+print()
+print(
+        beam.name,
+        beam.width,
+        beam.height,
+        item["mark"],
+        item["mu"],
+        item["vu"],
+    )
