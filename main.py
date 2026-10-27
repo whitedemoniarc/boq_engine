@@ -621,6 +621,24 @@ design_engine = BeamDesignEngine(registry)
 design_results = design_engine.initialize_results()
 
 
+from calculation.design_workflow import design_flexural_case
+
+for case, result in zip(
+    registry.get_design_cases(),
+    design_results,
+):
+    design_flexural_case(
+        design_case=case,
+        result=result,
+        fc=40,
+        fy=420,
+        phi=0.90,
+        stirrup_diameter=10,
+        main_bar_diameter=19,
+        max_bars=8,
+    )
+
+
 print("\nBEAM DESIGN RESULTS")
 print("-" * 80)
 
@@ -643,3 +661,50 @@ print("Total Design Case:", len(design_results))
 #     design_case=case,
 #     parameters=parameters,
 # )
+
+from calculation.flexural_design import (
+    calculate_required_rebar,
+)
+
+case = registry.get_design_cases("B1")[0]
+
+result = calculate_required_rebar(
+    design_case=case,
+    fc=40,
+    fy=420,
+    phi=0.90,  # nilai ilustrasi, bukan final
+    stirrup_diameter=10,
+    main_bar_diameter=19,
+)
+
+print("\nFLEXURAL DESIGN")
+print("-" * 50)
+
+for key, value in result.items():
+    print(f"{key:<20}: {value}")
+
+print("-" * 50)
+from calculation.bar_selection import select_main_rebar
+
+result = select_main_rebar(
+    as_required=2000,  # mm2, contoh nilai
+    diameter=22,
+    max_bars=8,
+)
+
+print(result)
+
+print("-" * 50)
+print("\nFLEXURAL DESIGN SUMMARY")
+print("-" * 100)
+
+for result in design_results:
+    print(
+        f"{result.beam_type:<6}"
+        f"{result.mark:<22}"
+        f"{result.mu:>10.1f}"
+        f"{result.as_required:>12.1f}"
+        f"{result.main_bar_quantity:>8}"
+        f"D{result.main_bar_diameter:<6}"
+        f"{result.as_provided:>12.1f}"
+    )

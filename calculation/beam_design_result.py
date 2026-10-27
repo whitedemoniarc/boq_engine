@@ -21,6 +21,20 @@ class BeamDesignResult:
         self.status = status
         self.notes = notes or []
 
+        # Main reinforcement selection
+        self.main_bar_diameter = None
+        self.main_bar_quantity = None
+        
+    def set_main_rebar(
+        self,
+        diameter,
+        quantity,
+        as_provided,
+    ):
+        self.main_bar_diameter = diameter
+        self.main_bar_quantity = quantity
+        self.as_provided = as_provided
+
     @property
     def beam(self):
         return self.design_case.beam
