@@ -686,13 +686,13 @@ for key, value in result.items():
 print("-" * 50)
 from calculation.bar_selection import select_main_rebar
 
-result = select_main_rebar(
-    as_required=2000,  # mm2, contoh nilai
-    diameter=22,
-    max_bars=8,
-)
+# result = select_main_rebar(
+#     as_required=2000,  # mm2, contoh nilai
+#     diameter=22,
+#     max_bars=8,
+# )
 
-print(result)
+# print(result)
 
 print("-" * 50)
 print("\nFLEXURAL DESIGN SUMMARY")
@@ -707,4 +707,51 @@ for result in design_results:
         f"{result.main_bar_quantity:>8}"
         f"D{result.main_bar_diameter:<6}"
         f"{result.as_provided:>12.1f}"
+    )
+
+print("-" * 50)
+
+
+print(
+    f"{'TYPE':<8}"
+    f"{'MARK':<20}"
+    f"{'Mu':>10}"
+    f"{'QTY':>8}"
+    f"{'BAR':<7}"
+    f"{'As_req':>12}"
+    f"{'As_prov':>12}"
+    f"{'phiMn':>12}"
+    f"{'STATUS':>20}"
+)
+
+print("-" * 109)
+
+
+for case, result in zip(
+    registry.get_design_cases(),
+    design_results,
+):
+    result, check = design_flexural_case(
+        design_case=case,
+        result=result,
+        fc=40,
+        fy=420,
+        phi=0.90,
+        stirrup_diameter=10,
+        main_bar_diameter=19,
+        max_bars=8,
+    )
+    
+    
+
+    print(
+        f"{case.beam_type:<8}"
+        f"{case.mark:<20}"
+        f"{case.mu:>10.2f}"
+        f"{result.main_bar_quantity:>8}"
+        f"D{result.main_bar_diameter:<6}"
+        f"{result.as_required:>12.2f}"
+        f"{result.as_provided:>12.2f}"
+        f"{check['phi_Mn_kNm']:>12.2f}"
+        f"{check['status']:>20}"
     )
