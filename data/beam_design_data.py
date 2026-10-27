@@ -47,4 +47,28 @@ BEAM_DESIGN_DATA = [
         "mu": 200,
         "vu": 100,
     },
+     {
+            "beam_type": "B4",
+            "mark": "Tumpuan Atas",
+            "mu": -180,
+            "vu": 100,
+        },
+        {
+            "beam_type": "B4",
+            "mark": "Tumpuan Bawah",
+            "mu": 90,
+            "vu": 100,
+        },
+        {
+            "beam_type": "B4",
+            "mark": "Lapangan Atas",
+            "mu": -100,
+            "vu": 100,
+        },
+        {
+            "beam_type": "B4",
+            "mark": "Lapangan Bawah",
+            "mu": 200,
+            "vu": 100,
+        },
 ]

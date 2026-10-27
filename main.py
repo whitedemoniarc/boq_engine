@@ -546,8 +546,8 @@ def create_beam(beam_type, parameters):
         length=data["length"],
         parameters=parameters,
     )
-    
-    
+
+
 from data.beam_design_data import BEAM_DESIGN_DATA
 
 for item in BEAM_DESIGN_DATA:
@@ -572,3 +572,74 @@ print(
         item["mu"],
         item["vu"],
     )
+
+from data.beam_data import BEAM_DATA
+from data.beam_design_data import BEAM_DESIGN_DATA
+from calculation.beam_registry import BeamRegistry
+
+registry = BeamRegistry(
+    beam_data=BEAM_DATA,
+    beam_design_data=BEAM_DESIGN_DATA,
+    parameters=parameters,
+)
+
+for beam_type, beam in registry.beams.items():
+    print(
+        beam_type,
+        beam.width,
+        beam.height,
+        beam.length,
+    )
+
+for case in registry.get_design_cases():
+    print(
+        case.beam_type,
+        case.beam.width,
+        case.beam.height,
+        case.mark,
+        case.mu,
+        case.vu,
+    )
+
+
+print("Jumlah Beam:", len(registry.beams))
+print("Jumlah Design Case:", len(registry.design_cases))
+
+for case in registry.get_design_cases():
+    print(
+        case.beam_type,
+        case.mark,
+        case.mu,
+        case.vu,
+    )
+
+
+from calculation.beam_design_engine import BeamDesignEngine
+
+design_engine = BeamDesignEngine(registry)
+
+design_results = design_engine.initialize_results()
+
+
+print("\nBEAM DESIGN RESULTS")
+print("-" * 80)
+
+for result in design_results:
+    print(
+        f"{result.beam_type:<8}"
+        f"{result.beam.width:>8}"
+        f"{result.beam.height:>8} "
+        f"{result.mark:<22}"
+        f"{result.mu:>12}"
+        f"{result.vu:>12}"
+        f"{result.status:>18}"
+    )
+
+print("-" * 80)
+print("Total Design Case:", len(design_results))
+
+
+# result = calculate_required_rebar(
+#     design_case=case,
+#     parameters=parameters,
+# )

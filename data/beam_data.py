@@ -9,4 +9,9 @@ BEAM_DATA = {
         "height": 700,
         "length": 6000,
     },
+    "B4": {
+            "width": 350,
+            "height": 700,
+            "length": 6000,
+        },
 }
