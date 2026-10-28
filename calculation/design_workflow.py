@@ -162,9 +162,10 @@ def design_flexural_case(
         stirrup_diameter=stirrup_diameter,
         min_clear_spacing=25,
         max_bars=max_bars,
-        diameters=[13, 16, 19, 22, 25],
+        # diameters=[13, 16, 19, 22, 25],
+        diameters=[ 22, 25],
     )
-
+    # 3. Simpan kebutuhan tulangan
     result.as_required = as_required
 
     if evaluation["selected"] is None:
@@ -172,6 +173,7 @@ def design_flexural_case(
         result.notes.append("No preliminary reinforcement candidate passed.")
         return result, evaluation
 
+    # 4. Ambil kandidat terpilih
     selected = evaluation["selected"]
 
     result.set_main_rebar(

@@ -695,8 +695,8 @@ from calculation.bar_selection import select_main_rebar
 # print(result)
 
 print("-" * 50)
-# print("\nFLEXURAL DESIGN SUMMARY")
-# print("-" * 100)
+print("\nFLEXURAL DESIGN SUMMARY")
+print("-" * 100)
 
 # for result in design_results:
 #     print(
@@ -709,7 +709,7 @@ print("-" * 50)
 #         f"{result.as_provided:>12.1f}"
 #     )
 
-# print("-" * 50)
+print("-" * 50)
 
 
 print(
@@ -727,32 +727,37 @@ print(
 print("-" * 109)
 
 
-# for case, result in zip(
-#     registry.get_design_cases(),
-#     design_results,
-# ):
-#     result, check = design_flexural_case(
-#         design_case=case,
-#         result=result,
-#         fc=40,
-#         fy=420,
-#         phi=0.90,
-#         stirrup_diameter=10,
-#         # main_bar_diameter=19,
-#         max_bars=8,
-#     )
+for case, result in zip(
+    registry.get_design_cases(),
+    design_results,
+):
+    result, check = design_flexural_case(
+        design_case=case,
+        result=result,
+        fc=40,
+        fy=420,
+        phi=0.90,
+        stirrup_diameter=10,
+        # main_bar_diameter=19,
+        max_bars=8,
+    )
 
-#     print(
-#         f"{case.beam_type:<8}"
-#         f"{case.mark:<20}"
-#         f"{case.mu:>10.2f}"
-#         f"{result.main_bar_quantity:>8}"
-#         f"D{result.main_bar_diameter:<6}"
-#         f"{result.as_required:>12.2f}"
-#         f"{result.as_provided:>12.2f}"
-#         f"{check['phi_Mn_kNm']:>12.2f}"
-#         f"{check['status']:>20}"
-#     )
+# print("\nDEBUG CHECK:")
+# print(check)
+# print("KEYS:", list(check.keys()))
+print(
+    f"{case.beam_type:<8}"
+    f"{case.mark:<20}"
+    f"{case.mu:>10.2f}"
+    f"{result.main_bar_quantity:>8}"
+    f"D{result.main_bar_diameter:<6}"
+    f"{result.as_required:>12.2f}"
+    # f"{result.as_provided:>12.2f}"
+    f"{check['selected']['as_provided']:>12.2f}"
+    f"{check['selected']['phi_Mn_kNm']:>12.2f}"
+    f"{check['selected']['moment_margin_kNm']:>12.2f}"
+    f"{check['status']:>20}"
+)
 
 
 print(
@@ -807,3 +812,9 @@ for candidate in evaluation["candidates"]:
         f"phiMn={candidate['phi_Mn_kNm']:.2f} kNm | "
         f"Margin={candidate['moment_margin_kNm']:.2f} kNm"
     )
+
+from reports.report_flexural import (
+    print_flexural_report,
+)
+
+print_flexural_report(design_results)
