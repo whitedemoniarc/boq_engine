@@ -623,20 +623,20 @@ design_results = design_engine.initialize_results()
 
 from calculation.design_workflow import design_flexural_case
 
-for case, result in zip(
-    registry.get_design_cases(),
-    design_results,
-):
-    design_flexural_case(
-        design_case=case,
-        result=result,
-        fc=40,
-        fy=420,
-        phi=0.90,
-        stirrup_diameter=10,
-        main_bar_diameter=19,
-        max_bars=8,
-    )
+# for case, result in zip(
+#     registry.get_design_cases(),
+#     design_results,
+# ):
+#     design_flexural_case(
+#         design_case=case,
+#         result=result,
+#         fc=40,
+#         fy=420,
+#         phi=0.90,
+#         stirrup_diameter=10,
+#         main_bar_diameter=19,
+#         max_bars=8,
+#     )
 
 
 print("\nBEAM DESIGN RESULTS")
@@ -695,21 +695,21 @@ from calculation.bar_selection import select_main_rebar
 # print(result)
 
 print("-" * 50)
-print("\nFLEXURAL DESIGN SUMMARY")
-print("-" * 100)
+# print("\nFLEXURAL DESIGN SUMMARY")
+# print("-" * 100)
 
-for result in design_results:
-    print(
-        f"{result.beam_type:<6}"
-        f"{result.mark:<22}"
-        f"{result.mu:>10.1f}"
-        f"{result.as_required:>12.1f}"
-        f"{result.main_bar_quantity:>8}"
-        f"D{result.main_bar_diameter:<6}"
-        f"{result.as_provided:>12.1f}"
-    )
+# for result in design_results:
+#     print(
+#         f"{result.beam_type:<6}"
+#         f"{result.mark:<22}"
+#         f"{result.mu:>10.1f}"
+#         f"{result.as_required:>12.1f}"
+#         f"{result.main_bar_quantity:>8}"
+#         f"D{result.main_bar_diameter:<6}"
+#         f"{result.as_provided:>12.1f}"
+#     )
 
-print("-" * 50)
+# print("-" * 50)
 
 
 print(
@@ -727,31 +727,83 @@ print(
 print("-" * 109)
 
 
+# for case, result in zip(
+#     registry.get_design_cases(),
+#     design_results,
+# ):
+#     result, check = design_flexural_case(
+#         design_case=case,
+#         result=result,
+#         fc=40,
+#         fy=420,
+#         phi=0.90,
+#         stirrup_diameter=10,
+#         # main_bar_diameter=19,
+#         max_bars=8,
+#     )
+
+#     print(
+#         f"{case.beam_type:<8}"
+#         f"{case.mark:<20}"
+#         f"{case.mu:>10.2f}"
+#         f"{result.main_bar_quantity:>8}"
+#         f"D{result.main_bar_diameter:<6}"
+#         f"{result.as_required:>12.2f}"
+#         f"{result.as_provided:>12.2f}"
+#         f"{check['phi_Mn_kNm']:>12.2f}"
+#         f"{check['status']:>20}"
+#     )
+
+
+print(
+    f"{'TYPE':<8}"
+    f"{'MARK':<20}"
+    f"{'Mu':>10}"
+    f"{'QTY':>6}"
+    f"{'BAR':<6}"
+    f"{'As_prov':>12}"
+    f"{'phiMn':>12}"
+    f"{'MARGIN':>12}"
+)
+print("-" * 86)
+
+
 for case, result in zip(
     registry.get_design_cases(),
     design_results,
 ):
-    result, check = design_flexural_case(
+    result, evaluation = design_flexural_case(
         design_case=case,
         result=result,
         fc=40,
         fy=420,
         phi=0.90,
         stirrup_diameter=10,
-        main_bar_diameter=19,
         max_bars=8,
     )
-    
-    
+
+    selected = evaluation["selected"]
+
+    if selected is None:
+        print(f"{case.beam_type} | {case.mark} | " f"{evaluation['status']}")
+        continue
 
     print(
         f"{case.beam_type:<8}"
         f"{case.mark:<20}"
         f"{case.mu:>10.2f}"
-        f"{result.main_bar_quantity:>8}"
-        f"D{result.main_bar_diameter:<6}"
-        f"{result.as_required:>12.2f}"
-        f"{result.as_provided:>12.2f}"
-        f"{check['phi_Mn_kNm']:>12.2f}"
-        f"{check['status']:>20}"
+        f"{selected['quantity']:>6}"
+        f"D{selected['diameter']:<5}"
+        f"{selected['as_provided']:>12.2f}"
+        f"{selected['phi_Mn_kNm']:>12.2f}"
+        f"{selected['moment_margin_kNm']:>12.2f}"
+    )
+
+
+for candidate in evaluation["candidates"]:
+    print(
+        f"{candidate['quantity']}D{candidate['diameter']} | "
+        f"As={candidate['as_provided']:.2f} | "
+        f"phiMn={candidate['phi_Mn_kNm']:.2f} kNm | "
+        f"Margin={candidate['moment_margin_kNm']:.2f} kNm"
     )

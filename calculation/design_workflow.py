@@ -2,59 +2,133 @@ from calculation.flexural_design import (
     calculate_required_rebar,
 )
 
-from calculation.bar_selection import (
-    select_main_rebar,
-)
+# from calculation.bar_selection import (
+#     select_main_rebar,
+# )
 
 
-def design_flexural_case(
-    design_case,
-    result,
-    fc,
-    fy,
-    phi,
-    stirrup_diameter,
-    main_bar_diameter,
-    max_bars=8,
-):
-    # 1. Calculate required As
-    flexural = calculate_required_rebar(
-        design_case=design_case,
-        fc=fc,
-        fy=fy,
-        phi=phi,
-        stirrup_diameter=stirrup_diameter,
-        main_bar_diameter=main_bar_diameter,
-    )
+# def design_flexural_case(
+#     design_case,
+#     result,
+#     fc,
+#     fy,
+#     phi,
+#     stirrup_diameter,
+#     main_bar_diameter,
+#     max_bars=8,
+# ):
+#     # 1. Calculate required As
+#     flexural = calculate_required_rebar(
+#         design_case=design_case,
+#         fc=fc,
+#         fy=fy,
+#         phi=phi,
+#         stirrup_diameter=stirrup_diameter,
+#         main_bar_diameter=main_bar_diameter,
+#     )
 
-    as_required = flexural["as_required"]
+#     as_required = flexural["as_required"]
 
-    # 2. Select reinforcement
-    selection = select_main_rebar(
-        as_required=as_required,
-        diameter=main_bar_diameter,
-        max_bars=max_bars,
-    )
+#     # 2. Select reinforcement
+#     selection = select_main_rebar(
+#         as_required=as_required,
+#         diameter=main_bar_diameter,
+#         max_bars=max_bars,
+#     )
 
-    # 3. Store results
-    result.as_required = as_required
+#     # 3. Store results
+#     result.as_required = as_required
 
-    result.set_main_rebar(
-        diameter=selection["diameter"],
-        quantity=selection["quantity"],
-        as_provided=selection["as_provided"],
-    )
+#     result.set_main_rebar(
+#         diameter=selection["diameter"],
+#         quantity=selection["quantity"],
+#         as_provided=selection["as_provided"],
+#     )
 
-    result.status = "PRELIMINARY_ONLY"
+#     result.status = "PRELIMINARY_ONLY"
 
-    result.notes.append("Bar area selection only; full detailing checks pending.")
+#     result.notes.append("Bar area selection only; full detailing checks pending.")
 
-    return result
+#     return result
+
+
+# from calculation.flexural_design import calculate_required_rebar
+# from calculation.bar_selection import select_main_rebar
+# from calculation.flexural_check import check_flexural_capacity
+
+
+# def design_flexural_case(
+#     design_case,
+#     result,
+#     fc,
+#     fy,
+#     phi,
+#     stirrup_diameter,
+#     main_bar_diameter,
+#     max_bars=8,
+# ):
+#     # 1. Calculate required reinforcement
+#     flexural = calculate_required_rebar(
+#         design_case=design_case,
+#         fc=fc,
+#         fy=fy,
+#         phi=phi,
+#         stirrup_diameter=stirrup_diameter,
+#         main_bar_diameter=main_bar_diameter,
+#     )
+
+#     as_required = flexural["as_required"]
+
+#     # 2. Select reinforcement
+#     # selection = select_main_rebar(
+#     #     as_required=as_required,
+#     #     diameter=main_bar_diameter,
+#     #     max_bars=max_bars,
+#     # )
+
+
+#     selection = select_main_rebar(
+#     as_required=as_required,
+#     beam_width=design_case.beam.width,
+#     cover=design_case.beam.cover,
+#     stirrup_diameter=stirrup_diameter,
+#     min_clear_spacing=25,
+#     max_bars=8,
+#     diameters=[13, 16, 19, 22, 25],
+# )
+
+
+#     # 3. Check provided reinforcement capacity
+#     check = check_flexural_capacity(
+#         design_case=design_case,
+#         as_provided=selection["as_provided"],
+#         fc=fc,
+#         fy=fy,
+#         phi=phi,
+#         stirrup_diameter=stirrup_diameter,
+#         main_bar_diameter=main_bar_diameter,
+#     )
+
+#     # 4. Save results
+#     result.as_required = as_required
+
+#     result.set_main_rebar(
+#         diameter=selection["diameter"],
+#         quantity=selection["quantity"],
+#         as_provided=selection["as_provided"],
+#     )
+
+#     result.status = check["status"]
+
+#     result.notes.append("Preliminary flexural capacity check only.")
+
+#     return result, check
 
 
 from calculation.flexural_design import calculate_required_rebar
-from calculation.bar_selection import select_main_rebar
-from calculation.flexural_check import check_flexural_capacity
+from calculation.candidate_evaluator import (
+    evaluate_main_rebar_candidates,
+)
 
 
 def design_flexural_case(
@@ -64,62 +138,49 @@ def design_flexural_case(
     fy,
     phi,
     stirrup_diameter,
-    main_bar_diameter,
     max_bars=8,
 ):
-    # 1. Calculate required reinforcement
+    # 1. Required reinforcement
     flexural = calculate_required_rebar(
         design_case=design_case,
         fc=fc,
         fy=fy,
         phi=phi,
         stirrup_diameter=stirrup_diameter,
-        main_bar_diameter=main_bar_diameter,
+        main_bar_diameter=19,  # preliminary reference
     )
 
     as_required = flexural["as_required"]
 
-    # 2. Select reinforcement
-    # selection = select_main_rebar(
-    #     as_required=as_required,
-    #     diameter=main_bar_diameter,
-    #     max_bars=max_bars,
-    # )
-    
-    
-    selection = select_main_rebar(
-    as_required=as_required,
-    beam_width=design_case.beam.width,
-    cover=design_case.beam.cover,
-    stirrup_diameter=stirrup_diameter,
-    min_clear_spacing=25,
-    max_bars=8,
-    diameters=[13, 16, 19, 22, 25],
-)
-
-
-    # 3. Check provided reinforcement capacity
-    check = check_flexural_capacity(
+    # 2. Evaluate candidates
+    evaluation = evaluate_main_rebar_candidates(
         design_case=design_case,
-        as_provided=selection["as_provided"],
+        as_required=as_required,
         fc=fc,
         fy=fy,
         phi=phi,
         stirrup_diameter=stirrup_diameter,
-        main_bar_diameter=main_bar_diameter,
+        min_clear_spacing=25,
+        max_bars=max_bars,
+        diameters=[13, 16, 19, 22, 25],
     )
 
-    # 4. Save results
     result.as_required = as_required
 
+    if evaluation["selected"] is None:
+        result.status = "NO_CANDIDATE_PASSED"
+        result.notes.append("No preliminary reinforcement candidate passed.")
+        return result, evaluation
+
+    selected = evaluation["selected"]
+
     result.set_main_rebar(
-        diameter=selection["diameter"],
-        quantity=selection["quantity"],
-        as_provided=selection["as_provided"],
+        diameter=selected["diameter"],
+        quantity=selected["quantity"],
+        as_provided=selected["as_provided"],
     )
 
-    result.status = check["status"]
+    result.status = "PRELIMINARY_PASS"
+    result.notes.append("Preliminary candidate evaluation only.")
 
-    result.notes.append("Preliminary flexural capacity check only.")
-
-    return result, check
+    return result, evaluation
